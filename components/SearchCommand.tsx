@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { CommandDialog, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
 import { useDebounce } from '@/hooks/useDebounce';
 import { searchStocks } from '@/lib/actions/finnhub.actions';
-import { getCurrentUserWatchlistSymbols } from '@/lib/actions/watchlist.actions';
+import { getCurrentUserWatchlist } from '@/lib/actions/watchlist.actions';
 import { Loader2, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
