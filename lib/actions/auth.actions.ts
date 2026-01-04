@@ -6,8 +6,10 @@ import { headers } from 'next/headers';
 export const signUpWithEmail = async ({email, password, fullName, country, investmentGoals, riskTolerance, preferredIndustry} : SignUpFormData) => {
     try {
         const response = await auth.api.signUpEmail({
-            body : {email, password, name: fullName}
+            body: {email, password, name: fullName},
+            headers: await headers()
         })
+        
         if(response) {
             await inngest.send({
                 name: 'app/user.created',
@@ -21,6 +23,7 @@ export const signUpWithEmail = async ({email, password, fullName, country, inves
                 }
             })
         }
+        
         return {success: true, data: response}
     } catch (e) {
         console.log("Sign Up failed", e);
@@ -31,8 +34,10 @@ export const signUpWithEmail = async ({email, password, fullName, country, inves
 export const signInWithEmail = async ({email, password} : SignInFormData) => {
     try {
         const response = await auth.api.signInEmail({
-            body : {email, password}
+            body: {email, password},
+            headers: await headers()
         })
+        
         return {success: true, data: response}
     } catch (e) {
         console.log("Sign In failed", e);
@@ -42,7 +47,11 @@ export const signInWithEmail = async ({email, password} : SignInFormData) => {
 
 export const signOut = async () => {
     try {
-        await auth.api.signOut({headers: await headers()})
+        await auth.api.signOut({
+            headers: await headers()
+        })
+        
+        return {success: true}
     } catch (e) {
         console.log("Sign Out failed", e);
         return {success: false, error: "Sign Out failed"}
@@ -51,7 +60,6 @@ export const signOut = async () => {
 
 export const getCurrentUser = async () => {
     try {
-        // Get the session using Better Auth
         const session = await auth.api.getSession({
             headers: await headers()
         });
@@ -60,13 +68,11 @@ export const getCurrentUser = async () => {
             return null;
         }
         
-        // Return the user object with proper typing
         const user = session.user;
         return {
             id: user.id,
             email: user.email,
             name: user.name,
-            // Add any other user properties you need
         };
     } catch (error) {
         console.error('Error getting current user:', error);
